@@ -1,0 +1,7 @@
+.kitchen/
+.kitchen.local.yml
+Gemfile.lock
+db-backup/
+*.tar.gz
+.DS_Store
+*.log

@@ -1,0 +1,43 @@
+---
+  - name: Copy database over
+    copy: src=../files/world.sql dest=/tmp/world.sql
+
+  - name: Create database
+    mysql_db: name=world state=present login_user='root' login_password='{{ mysql_root_password }}'
+
+  - name: Import data
+    mysql_db: name=world state=import target=/tmp/world.sql login_user='root' login_password='{{ mysql_root_password }}'
+
+  - name: Stop the MySQL service
+    become: yes
+    service: 
+      name: mysql 
+      state: stopped
+      enabled: true
+
+  - name: Create backup directory
+    shell: mkdir -p /vagrant/db-backup/
+
+  - name: Backup MySQL's Data files
+    shell: cp -R /var/lib/mysql/* /vagrant/db-backup/
+
+  - name: Change directory to backup directory
+    shell: cd /vagrant/
+
+  #- name: Compress the backup files and folders
+   # shell: tar czvf mysql-backup-$(date +%Y%m%d_%H%M%S).tar.gz db-backup/*
+  
+  - name: Compress the backup files and folders
+    archive:
+      path: /vagrant/db-backup/
+      dest: /vagrant/mysql-backup.tar.gz
+
+  - name: Compute the MD5 Checksum of the backup archive
+    shell: md5sum /vagrant/mysql-backup.tar.gz > /vagrant/backup-archive-md5.txt
+  
+  - name: Start the MySQL service
+    become: yes
+    service: 
+      name: mysql 
+      state: started
+      enabled: true
