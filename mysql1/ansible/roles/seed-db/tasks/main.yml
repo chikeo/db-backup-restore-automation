@@ -1,0 +1,9 @@
+---
+  - name: Copy database over
+    copy: src=../files/world.sql dest=/tmp/world.sql
+
+  - name: Create database
+    mysql_db: name=world state=present login_user='root' login_password='{{ mysql_root_password }}'
+
+  - name: Import data
+    mysql_db: name=world state=import target=/tmp/world.sql login_user='root' login_password='{{ mysql_root_password }}'

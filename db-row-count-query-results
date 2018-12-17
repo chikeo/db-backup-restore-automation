@@ -1,0 +1,23 @@
+mysql> select count(*) from city;
++----------+
+| count(*) |
++----------+
+|     4079 |
++----------+
+1 row in set (0.00 sec)
+
+mysql> select count(*) from country;
++----------+
+| count(*) |
++----------+
+|      239 |
++----------+
+1 row in set (0.00 sec)
+
+mysql> select count(*) from countrylanguage;
++----------+
+| count(*) |
++----------+
+|      984 |
++----------+
+1 row in set (0.00 sec)

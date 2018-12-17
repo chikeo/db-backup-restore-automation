@@ -1,0 +1,31 @@
+---
+  - name: Stop the MySQL service
+    become: yes
+    service: 
+      name: mysql 
+      state: stopped
+      enabled: true
+
+  - name: Create backup directory
+    shell: mkdir -p /vagrant/db-backup/
+
+  - name: Backup MySQL's Data files to a shared location
+    shell: cp -R /var/lib/mysql/* /vagrant/db-backup/
+
+  #- name: Change directory to backup directory
+  #  shell: cd /vagrant/
+  
+  - name: Compress the backup files and folders
+    archive:
+      path: /vagrant/db-backup/
+      dest: /vagrant/mysql-backup.tar.gz
+
+  - name: Compute the MD5 Checksum of the backup archive
+    shell: md5sum /vagrant/mysql-backup.tar.gz > /vagrant/backup-archive-md5.txt
+  
+  - name: Start the MySQL service
+    become: yes
+    service: 
+      name: mysql 
+      state: started
+      enabled: true

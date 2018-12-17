@@ -1,0 +1,8 @@
+---
+- name: wrapper playbook for kitchen testing
+  hosts: mysql1,backup1
+  vars:
+    ansible_python_interpreter: "/usr/bin/env python"
+    mysql_root_password: fart
+  roles:
+    - mysql

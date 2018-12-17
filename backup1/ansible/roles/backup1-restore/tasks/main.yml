@@ -1,0 +1,43 @@
+---
+  - name: Stop the MySQL service
+    become: yes
+    service: 
+      name: mysql 
+      state: stopped
+      enabled: true
+
+  - name: Delete the MySQL Data Files
+    shell: rm -R /var/lib/mysql/*
+
+  - name: Copy the backup archive from the shared location to the temporary directory
+    shell: cp /vagrant/mysql-backup.tar.gz /tmp/
+
+  - name: Compute the MD5 Checksum of the just copied backup archive
+    shell: md5sum /tmp/mysql-backup.tar.gz > /tmp/backup-archive-md5.txt
+
+  - name: Extract /tmp/mysql-backup.tar.gz into /var/lib/mysql
+    unarchive:
+      src: /tmp/mysql-backup.tar.gz
+      dest: /var/lib/mysql
+      remote_src: yes
+
+  - name: Set the permissions correctly for the MySQL daemon
+    shell: chown -R mysql:mysql /var/lib/mysql
+  
+  - name: Start the MySQL service
+    become: yes
+    service: 
+      name: mysql 
+      state: started
+      enabled: true
+      
+  - name: DB Restore Verification Script - Copy file db-restore-test.sh to directory /home/vagrant/ on the target host
+    copy:
+      src: ../files/db-restore-test.sh
+      dest: /home/vagrant/db-restore-test.sh
+      owner: root
+      group: root
+      mode: u+rwx,g+rx,g-w,o+rx,o-w
+
+  - name: Run the DB Restore Verification Script to test the backup and restore op.
+    shell: /home/vagrant/db-restore-test.sh 'mysql -u root -p{{ mysql_root_password }} -P3306'
