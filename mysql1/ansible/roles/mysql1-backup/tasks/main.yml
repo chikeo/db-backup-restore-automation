@@ -1,4 +1,14 @@
 ---
+  - name: Creates a nightly backup cronjob. Creates an entry like "0 0 * * *"
+    cron:
+      minute: "0"
+      hour: "0"
+      name: "Backup mysql tables (nightly schedule)"
+      cron_file: "mysqlbackup-WeeklyBackups"
+      user: "root"
+      job: "/vagrant/mysqlbackup.WeeklyBackups.sh"
+
+# Take a first backup immediately before the scheduled cron job kicks in
   - name: Stop the MySQL service
     become: yes
     service: 

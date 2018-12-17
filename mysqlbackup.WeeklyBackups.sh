@@ -11,7 +11,7 @@ sudo echo "Copying MySQL Data Files to the backup directory"
 sudo cp -R /var/lib/mysql/. /vagrant/db-backup/
 
 sudo echo "Compressing the MySQL Data Files into the tar.gz format"
-sudo tar cvzf /vagrant/mysql-backup.tar.gz /vagrant/db-backup/
+sudo tar cvzf /vagrant/mysql-backup.tar.gz -C /vagrant/db-backup/ .
 sudo echo "Checking the size of the just compressed archive..."
 sudo du -h /vagrant/mysql-backup.tar.gz
 
