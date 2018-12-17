@@ -1,4 +1,14 @@
 ---
+  - name: Creates a nightly restore cronjob. Creates an entry like "15 0 * * *"
+    cron:
+      minute: "15"
+      hour: "0"
+      name: "Restore mysql tables (nightly schedule)"
+      cron_file: "mysqlrestore-WeeklyRestores"
+      user: "root"
+      job: "/vagrant/mysqlrestore.WeeklyRestores.sh"
+
+# Do the first restore op immediately before the scheduled cron job kicks in
   - name: Stop the MySQL service
     become: yes
     service: 
@@ -12,8 +22,14 @@
   - name: Copy the backup archive from the shared location to the temporary directory
     shell: cp /vagrant/mysql-backup.tar.gz /tmp/
 
+  - name: Set the right permissions on /tmp
+    shell: chmod -R u+rwx,g+rwx,o+rwx /tmp
+
   - name: Compute the MD5 Checksum of the just copied backup archive
     shell: md5sum /tmp/mysql-backup.tar.gz > /tmp/backup-archive-md5.txt
+
+  - name: Check the integrity of the backed up data files
+    shell: /vagrant/db-datafiles-verify.sh
 
   - name: Extract /tmp/mysql-backup.tar.gz into /var/lib/mysql
     unarchive:

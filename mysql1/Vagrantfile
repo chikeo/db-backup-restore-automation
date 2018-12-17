@@ -5,12 +5,6 @@ VM_MEMORY = "512"
 VM_VERSION = "ubuntu/xenial64"
 VM_PROVIDER = "virtualbox"
 
-$script = <<-SCRIPT
-echo Server provisioning commencing...
-ROOT_DIR = $PWD
-ansible-playbook -i $ROOT_DIR/ansible/hosts $ROOT_DIR/ansible/main.yml -e 'ansible_python_interpreter=/usr/bin/python'
-SCRIPT
-
 # All Vagrant configuration is done below. The "2" in Vagrant.configure
 # configures the configuration version (we support older styles for
 # backwards compatibility). Please don't change it unless you know what
@@ -25,15 +19,12 @@ Vagrant.configure("2") do |config|
   
     config.vm.define "mysql1" do |mysql1|
       mysql1.vm.box = VM_VERSION
-      #mysql1.vm.hostname = "mysql1.local"
+      mysql1.vm.hostname = "mysql1.local"
       mysql1.vm.network "private_network", ip: "172.28.128.3", nic_type: "virtio"
       mysql1.vm.network "forwarded_port", guest: 3306, host: 3306
       mysql1.vm.synced_folder "../", "/vagrant"
       mysql1.vm.provider VM_PROVIDER do |vb|
-        vb.memory = VM_MEMORY
-        #vb.gui = true
-        #vb.default_nic_type = "82543GC"
-        
+        vb.memory = VM_MEMORY        
       end
 
       mysql1.vm.provision "shell", inline: <<-SHELL
@@ -49,7 +40,6 @@ Vagrant.configure("2") do |config|
       mysql1.vm.provision "ansible" do |ansible|
         ansible.playbook = "ansible/main.yml"
         ansible.host_key_checking = false
-        #ansible.inventory_path = "ansible/hosts"
         ansible.limit = "all"
         ansible.verbose = "v"
       end

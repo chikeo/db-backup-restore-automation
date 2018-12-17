@@ -6,3 +6,5 @@ db-backup/
 .DS_Store
 *.log
 .vagrant/
+mysql1/.vagrant/
+backup1/.vagrant/
