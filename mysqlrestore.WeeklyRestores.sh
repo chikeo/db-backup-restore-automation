@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-sudo echo "Commencing the MySQL backup job"
+sudo echo "Commencing the MySQL restore job"
 sudo echo "Stopping MySQL Server"
 sudo service mysql stop
 
@@ -34,5 +34,5 @@ sudo service mysql start
 sudo echo Run the DB Restore Verification Script to test the backup and restore op.
 sudo /vagrant/db-restore-test.sh 'mysql -u root -pfart -P3306'
 
-sudo echo "Completed the MySQL backup job"
+sudo echo "Completed the MySQL restore job"
 
