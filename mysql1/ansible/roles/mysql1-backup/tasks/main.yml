@@ -4,9 +4,9 @@
       minute: "0"
       hour: "0"
       name: "Backup mysql tables (nightly schedule)"
-      cron_file: "mysqlbackup-WeeklyBackups"
+      cron_file: "mysqlbackup-NightlyBackups"
       user: "root"
-      job: "/vagrant/mysqlbackup.WeeklyBackups.sh"
+      job: "/vagrant/mysqlbackup.NightlyBackups.sh"
 
 # Take a first backup immediately before the scheduled cron job kicks in
   - name: Stop the MySQL service

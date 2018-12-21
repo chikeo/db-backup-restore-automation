@@ -7,4 +7,7 @@ db-backup/
 *.log
 .vagrant/
 mysql1/.vagrant/
+mysql1/ansible/main.retry
 backup1/.vagrant/
+backup1/ansible/main.retry
+backup-archive-md5.txt

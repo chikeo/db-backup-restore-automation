@@ -4,9 +4,9 @@
       minute: "15"
       hour: "0"
       name: "Restore mysql tables (nightly schedule)"
-      cron_file: "mysqlrestore-WeeklyRestores"
+      cron_file: "mysqlrestore-NightlyRestores"
       user: "root"
-      job: "/vagrant/mysqlrestore.WeeklyRestores.sh"
+      job: "/vagrant/mysqlrestore.NightlyRestores.sh"
 
 # Do the first restore op immediately before the scheduled cron job kicks in
   - name: Stop the MySQL service
